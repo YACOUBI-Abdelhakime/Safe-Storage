@@ -1,9 +1,30 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../features/store";
+import { useDispatch } from "react-redux";
+import { AuthDto } from "../../features/user/types/dtos/AuthDto";
+import { login } from "../../features/user/asyncThunks";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+
+  let onSubmitLogin = (e: any) => {
+    e.preventDefault();
+    const form = e.target;
+    const authDto: AuthDto = {
+      email: form.email.value,
+      password: form.password.value,
+    };
+    // Dispatch the login action and navigate to the home page if success
+    dispatch(login(authDto))
+      .unwrap()
+      .then(() => {
+        navigate("/");
+      });
+  };
+
   return (
     <>
       <div className="bg-blue-600 h-full lg:w-5/12 hidden lg:block">
@@ -35,7 +56,7 @@ export default function LoginScreen() {
           <div className="text-center px-2 pb-12">
             <h2 className="font-bold text-4xl">{t("Login to your account")}</h2>
           </div>
-          <form>
+          <form onSubmit={onSubmitLogin}>
             <div className="mb-3">
               <input
                 type="email"
@@ -72,6 +93,7 @@ export default function LoginScreen() {
               <button
                 type="submit"
                 className="bg-blue-600 text-white px-4 py-2 w-full rounded-md hover:bg-blue-500 transition"
+                onClick={() => navigate("/register")}
               >
                 {t("Signup")}
               </button>
