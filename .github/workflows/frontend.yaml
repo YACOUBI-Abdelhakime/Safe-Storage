@@ -23,11 +23,11 @@ jobs:
         with:
           node-version: 20
 
-      # - name: Check server url if it is set
-      #   run: |
-      #     if grep -q 'localhost' ./src/utils/constants/urls.ts; then
-      #       exit 1
-      #     fi
+      - name: Check server url if it is set
+        run: |
+          if grep -q 'localhost' ./src/utils/constants/urls.ts; then
+            exit 1
+          fi
 
       - name: Install dependencies
         run: npm install
