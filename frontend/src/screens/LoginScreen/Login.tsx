@@ -1,14 +1,23 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../features/store";
-import { useDispatch } from "react-redux";
-import { AuthDto } from "../../features/user/types/dtos/AuthDto";
 import { login } from "../../features/user/asyncThunks";
+import { AuthDto } from "../../features/user/types/dtos/AuthDto";
+import {
+  validateEmail,
+  validatePassword,
+} from "../../utils/formValidations/FormValidations";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
+  const [formErrors, setFormErrors] = useState<{
+    email: string | null;
+    password: string | null;
+  }>({ email: null, password: null });
 
   let onSubmitLogin = (e: any) => {
     e.preventDefault();
@@ -17,6 +26,15 @@ export default function LoginScreen() {
       email: form.email.value,
       password: form.password.value,
     };
+    const emailError = validateEmail(authDto.email, t);
+    const passwordError = validatePassword(authDto.password, t);
+    // Set the error message
+    setFormErrors({ email: emailError, password: passwordError });
+
+    if (emailError || passwordError) {
+      // Form not valid
+      return;
+    }
     // Dispatch the login action and navigate to the home page if success
     dispatch(login(authDto))
       .unwrap()
@@ -56,30 +74,41 @@ export default function LoginScreen() {
           <div className="text-center px-2 pb-12">
             <h2 className="font-bold text-4xl">{t("Login to your account")}</h2>
           </div>
-          <form onSubmit={onSubmitLogin}>
+          <form onSubmit={onSubmitLogin} noValidate>
             <div className="mb-3">
               <input
                 type="email"
                 placeholder={t("Email")}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-describedby="emailHelp"
+                className={`${
+                  formErrors.email !== null
+                    ? "ring-red-500 ring-2"
+                    : "border-gray-300"
+                } w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 name="email"
-                required
               />
+              {formErrors.email !== null && (
+                <p className="mt-2 text-red-500 text-sm">{formErrors.email}</p>
+              )}
             </div>
             <div className="mb-3">
               <input
                 placeholder={t("Password")}
                 type="password"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`${
+                  formErrors.email !== null
+                    ? "ring-red-500 ring-2"
+                    : "border-gray-300"
+                } w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 name="password"
-                required
               />
+              {formErrors.password !== null && (
+                <p className="mt-2 text-red-500 text-sm whitespace-pre-line">
+                  {formErrors.password}
+                </p>
+              )}
             </div>
             <div className="flex justify-start mb-3">
-              <p className="text-blue-500 cursor-pointer">
-                {t("Forgot password !")}
-              </p>
+              <p className="text-blue-500">{t("Forgot password !")}</p>
             </div>
             <div className="flex justify-center mb-3">
               <button
