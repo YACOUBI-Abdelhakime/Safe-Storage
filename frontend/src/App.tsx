@@ -5,9 +5,10 @@ import LoginScreen from "./screens/LoginScreen/Login";
 import ProtectRoute from "./utils/ProtectRoutes/ProtectRoute";
 import Alert from "./components/Alert/Alert";
 import RegisterScreen from "./screens/RegisterScreen/Register";
+import useAuth from "./utils/customHooks/useAuth";
 
 function App() {
-  const isSignedIn = false;
+  const isSignedIn = useAuth();
   return (
     <>
       <BrowserRouter>

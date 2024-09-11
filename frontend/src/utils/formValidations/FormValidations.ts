@@ -1,6 +1,12 @@
 import { TFunction } from "i18next";
 
-// Function to validate the email
+/**
+ * Function to validate the email
+ *
+ * @param email
+ * @param t
+ * @returns Returns a string if the email is invalid, otherwise returns null
+ */
 export function validateEmail(
   email: string,
   t: TFunction<"translation", undefined>
@@ -16,7 +22,13 @@ export function validateEmail(
   return null;
 }
 
-// Function to validate the password
+/**
+ * Function to validate the password
+ *
+ * @param password
+ * @param t
+ * @returns Returns a string if the password is invalid, otherwise returns null
+ */
 export function validatePassword(
   password: string,
   t: TFunction<"translation", undefined>
@@ -37,7 +49,14 @@ export function validatePassword(
   return null;
 }
 
-// Function to validate the password confirmation
+/**
+ * Function to validate the password confirmation
+ *
+ * @param password
+ * @param confirmation
+ * @param t
+ * @returns Returns a string if the password confirmation is invalid, otherwise returns null
+ */
 export function validatePasswordConfirmation(
   password: string,
   confirmation: string,
