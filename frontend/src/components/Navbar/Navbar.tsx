@@ -12,7 +12,7 @@ export default function Example() {
       >
         <div className="flex lg:flex-1">
           <a className="-m-1.5 p-1.5" onClick={() => navigate("/")}>
-            <img alt="" src="src/assets/logo/logo.png" className="h-8 w-auto" />
+            <img alt="" src="assets/logo/logo.png" className="h-8 w-auto" />
           </a>
         </div>
         <div className="flex flex-1 justify-end">
