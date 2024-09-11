@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userSlice from "./user/userSlice.js";
+import globalSlice from "./global/globalSlice.js";
 
 // Redux-persist configuration for user reducer
 const persistConfigUserReducer = {
@@ -9,8 +10,15 @@ const persistConfigUserReducer = {
   storage,
 };
 
+// Redux-persist configuration for global reducer
+const persistConfigGlobalReducer = {
+  key: "globalReducer",
+  storage,
+};
+
 const rootReducer = {
   userReducer: persistReducer(persistConfigUserReducer, userSlice),
+  globalReducer: persistReducer(persistConfigGlobalReducer, globalSlice),
 };
 
 const store = configureStore({

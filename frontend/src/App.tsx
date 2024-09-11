@@ -3,6 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import LoginScreen from "./screens/LoginScreen/Login";
 import ProtectRoute from "./utils/ProtectRoutes/ProtectRoute";
+import Alert from "./components/Alert/Alert";
 
 function App() {
   const isSignedIn = false;
@@ -10,6 +11,7 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
+        <Alert />
         <div className="bg-blue-600 pt-16 flex h-screen">
           <Routes>
             <Route

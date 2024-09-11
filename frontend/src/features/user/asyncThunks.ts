@@ -4,6 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { SERVER_URL } from "../../utils/constants/urls";
 import { User } from "./types/User";
 import { AuthDto } from "./types/dtos/AuthDto";
+import { AlertType } from "../global/types/AlertType";
+import { addAlertMessage } from "../global/globalSlice";
 
 // Create axios instance
 const api = axios.create({
@@ -21,6 +23,9 @@ export const login = createAsyncThunk(
       user.token = response.data.token;
       return user;
     } catch (error: any) {
+      const message: string = error.response.data.message;
+      const type: AlertType = AlertType.ERROR;
+      thunkAPI.dispatch(addAlertMessage({ message, type }));
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -36,6 +41,9 @@ export const register = createAsyncThunk(
       user.token = response.data.token;
       return user;
     } catch (error: any) {
+      const message: string = error.response.data.message;
+      const type: AlertType = AlertType.ERROR;
+      thunkAPI.dispatch(addAlertMessage({ message, type }));
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
