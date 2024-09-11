@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar/Navbar";
 import LoginScreen from "./screens/LoginScreen/Login";
 import ProtectRoute from "./utils/ProtectRoutes/ProtectRoute";
 import Alert from "./components/Alert/Alert";
+import RegisterScreen from "./screens/RegisterScreen/Register";
 
 function App() {
   const isSignedIn = false;
@@ -27,7 +28,7 @@ function App() {
               path="/register"
               element={
                 <ProtectRoute isSignedIn={!isSignedIn} navigateTo="/">
-                  <h1>Register Screen</h1>
+                  <RegisterScreen />
                 </ProtectRoute>
               }
             ></Route>

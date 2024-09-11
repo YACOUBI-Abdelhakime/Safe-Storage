@@ -1,5 +1,5 @@
 {
-  "New here?": "Nouveau ici ?",
+  "New here ?": "Nouveau ici ?",
   "Already have an account ?": "Déjà un Compte ?",
   "Create a new account": "Créez un nouveau compte",
   "Signup": "S'inscrire",
@@ -21,5 +21,7 @@
   "Forgot password !": "Mot de passe oublié !",
   "Email": "Email",
   "Password": "Mot de passe",
-  "Login to access your personal space and securely upload your files in PDF or JPEG format": "Connectez-vous pour accéder à votre espace personnel et téléverser en toute sécurité vos fichiers au format PDF ou JPEG"
+  "Confirm password": "Confirmation du mot de passe",
+  "Login to access your personal space and securely upload your files in PDF or JPEG format": "Connectez-vous pour accéder à votre espace personnel et téléverser en toute sécurité vos fichiers au format PDF ou JPEG",
+  "Signup to access your personal space and securely upload your files in PDF or JPEG format": "Inscrivez-vous pour accéder à votre espace personnel et téléverser en toute sécurité vos fichiers au format PDF ou JPEG"
 }

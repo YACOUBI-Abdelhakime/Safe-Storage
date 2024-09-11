@@ -9,7 +9,7 @@ export function validateEmail(
     return t("Email is required");
   }
   // Use a regular expression to validate the email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
     return t("Email is not valid");
   }

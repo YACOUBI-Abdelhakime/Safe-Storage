@@ -9,6 +9,7 @@ import {
   validateEmail,
   validatePassword,
 } from "../../utils/formValidations/FormValidations";
+import AuthHero from "../../components/Authentication/AuthHero";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
@@ -45,30 +46,7 @@ export default function LoginScreen() {
 
   return (
     <>
-      <div className="bg-blue-600 h-full lg:w-5/12 hidden lg:block">
-        <div className="w-full h-full px-5 p-3 flex items-center justify-center">
-          <div className="text-center text-white px-2 pb-12">
-            <h2 className="font-bold text-4xl mb-5">
-              {t("Already have an account ?")}
-            </h2>
-            <p className="mb-8">
-              {t(
-                "Login to access your personal space and securely upload your files in PDF or JPEG format"
-              )}
-            </p>
-            <div className="flex justify-center mb-3">
-              <button
-                type="submit"
-                className="bg-white text-blue-600 px-4 py-2 w-full rounded-md hover:bg-gray-100 transition"
-                onClick={() => navigate("/register")}
-              >
-                {t("Signup")}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <AuthHero isSignup={false} />
       <div className="bg-white w-full lg:w-7/12 h-full flex items-center justify-center">
         <div className="w-full sm:p-5 md:p-16 lg:p-24 p-3">
           <div className="text-center px-2 pb-12">
@@ -95,7 +73,7 @@ export default function LoginScreen() {
                 placeholder={t("Password")}
                 type="password"
                 className={`${
-                  formErrors.email !== null
+                  formErrors.password !== null
                     ? "ring-red-500 ring-2"
                     : "border-gray-300"
                 } w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
