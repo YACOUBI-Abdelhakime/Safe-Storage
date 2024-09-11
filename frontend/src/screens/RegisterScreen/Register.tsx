@@ -10,6 +10,8 @@ import {
   validatePasswordConfirmation,
 } from "../../utils/formValidations/FormValidations";
 import AuthHero from "../../components/Authentication/AuthHero";
+import { EyeSlashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 export default function RegisterScreen() {
   const { t } = useTranslation();
@@ -25,6 +27,10 @@ export default function RegisterScreen() {
     password: "",
     passwordConfirmation: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   let onUpdateSignupData = (e: any) => {
     let emailError: string | null = null;
@@ -117,38 +123,61 @@ export default function RegisterScreen() {
                 <p className="mt-2 text-red-500 text-sm">{formErrors.email}</p>
               )}
             </div>
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <input
                 placeholder={t("Password")}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className={`${
                   formErrors.password !== null
                     ? "ring-red-500 ring-2"
                     : "border-gray-300"
-                } w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } w-full px-4 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 name="password"
                 value={user.password}
                 onChange={onUpdateSignupData}
               />
+              <div
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-2 right-0 px-3 text-gray-600 hover:text-gray-800 focus:outline-none cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeSlashIcon className="h-6 w-6 text-gray-600" />
+                ) : (
+                  <EyeIcon className="h-6 w-6 text-gray-600" />
+                )}
+              </div>
               {formErrors.password !== null && (
                 <p className="mt-2 text-red-500 text-sm whitespace-pre-line">
                   {formErrors.password}
                 </p>
               )}
             </div>
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <input
                 placeholder={t("Confirm password")}
-                type="password"
+                type={showPasswordConfirmation ? "text" : "password"}
                 className={`${
                   formErrors.passwordConfirmation !== null
                     ? "ring-red-500 ring-2"
                     : "border-gray-300"
-                } w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } w-full px-4 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 name="passwordConfirmation"
                 value={user.passwordConfirmation}
                 onChange={onUpdateSignupData}
               />
+
+              <div
+                onClick={() =>
+                  setShowPasswordConfirmation(!showPasswordConfirmation)
+                }
+                className="absolute top-2 right-0 px-3 text-gray-600 hover:text-gray-800 focus:outline-none cursor-pointer"
+              >
+                {showPasswordConfirmation ? (
+                  <EyeSlashIcon className="h-6 w-6 text-gray-600" />
+                ) : (
+                  <EyeIcon className="h-6 w-6 text-gray-600" />
+                )}
+              </div>
               {formErrors.passwordConfirmation !== null && (
                 <p className="mt-2 text-red-500 text-sm whitespace-pre-line">
                   {formErrors.passwordConfirmation}

@@ -10,6 +10,8 @@ import {
   validatePassword,
 } from "../../utils/formValidations/FormValidations";
 import AuthHero from "../../components/Authentication/AuthHero";
+import { EyeSlashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
@@ -19,8 +21,8 @@ export default function LoginScreen() {
     email: string | null;
     password: string | null;
   }>({ email: null, password: null });
-
-  let onSubmitLogin = (e: any) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const onSubmitLogin = (e: any) => {
     e.preventDefault();
     const form = e.target;
     const authDto: AuthDto = {
@@ -68,17 +70,28 @@ export default function LoginScreen() {
                 <p className="mt-2 text-red-500 text-sm">{formErrors.email}</p>
               )}
             </div>
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <input
                 placeholder={t("Password")}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className={`${
                   formErrors.password !== null
                     ? "ring-red-500 ring-2"
                     : "border-gray-300"
-                } w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } w-full px-4 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 name="password"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-2 right-0 px-3 text-gray-600 hover:text-gray-800 focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeSlashIcon className="h-6 w-6 text-gray-600" />
+                ) : (
+                  <EyeIcon className="h-6 w-6 text-gray-600" />
+                )}
+              </button>
               {formErrors.password !== null && (
                 <p className="mt-2 text-red-500 text-sm whitespace-pre-line">
                   {formErrors.password}
