@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
 import { FileManagerDto } from './dtos/file-manager.dto';
 import { FileManagerService } from './file-manager.service';
 import { FileManager } from './schemas/file-manager.schema';
+import { existsSync, mkdirSync, promises } from 'fs';
 
 @Controller('file-manager')
 export class FileManagerController {
@@ -41,9 +42,20 @@ export class FileManagerController {
         }
       },
       storage: diskStorage({
-        destination: './uploadedFiles',
-        filename: async (req, file, callback) => {
+        destination: (req, file, callback) => {
+          // Extract userId from JWT
           const userId = (req as any).user.user._id;
+          const uploadPath = `./uploadedFiles/${userId}`;
+
+          // Check if the directory exists, if not, create it
+          if (!existsSync(uploadPath)) {
+            // Create directory recursively
+            mkdirSync(uploadPath, { recursive: true });
+          }
+
+          callback(null, uploadPath); // Save the file in the user-specific folder
+        },
+        filename: async (req, file, callback) => {
           const uniqueSuffix =
             Date.now() + '-' + Math.round(Math.random() * 1e6);
           const ext = extname(file.originalname);
@@ -57,12 +69,8 @@ export class FileManagerController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ): Promise<FileManager> {
-    let userId: string;
-    try {
-      userId = (req as any).user.user._id;
-    } catch (e) {
-      throw new UnauthorizedException('User id not found from request');
-    }
+    const userId = (req as any).user.user._id;
+
     const fileExtension = extname(file.originalname);
     const fileData: FileManagerDto = {
       userId: userId,

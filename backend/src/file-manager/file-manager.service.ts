@@ -14,10 +14,7 @@ export class FileManagerService {
   ) {}
 
   async uploadFile(fileData: FileManagerDto): Promise<FileManager> {
-    console.log('fileData ', fileData);
-    const uploadedFilesFolderPath: string = './uploadedFiles';
-    console.log('file', fileData.fileName);
-    console.log('file', fileData.userId);
+    const uploadedFilesFolderPath: string = `./uploadedFiles/${fileData.userId}`;
 
     // Extract all parts of the file name except the last one (which is the extension)
     let fileNameWithoutExtension = fileData.fileName
