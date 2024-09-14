@@ -1,11 +1,11 @@
 services:
   backend:
     build:
-      context: ./backend
+      context: ./
     container_name: backend_container
-    image: backend-image:latest
+    image: ghcr.io/yacoubi-abdelhakime/safe-storage-backend-image:latest
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       # Persist uploads in a Docker volume
       - uploaded_files:/server/uploadedFiles
@@ -16,7 +16,7 @@ services:
     image: mongo:latest
     container_name: mongo_container
     ports:
-      - "27018:27017"
+      - '27018:27017'
     volumes:
       - mongo_data:/data/db
 

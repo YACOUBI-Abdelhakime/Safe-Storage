@@ -48,11 +48,18 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.TOKEN_GITHUB}}
 
-      - name: Build docker image
+      - name: Install Docker Compose
+        run: sudo apt install docker-compose -y
+
+      - name: Build Docker image
         if: ${{ github.event_name != 'pull_request' }}
         run: |
-          docker build . --tag ghcr.io/yacoubi-abdelhakime/go-car-server:latest
-          docker push ghcr.io/yacoubi-abdelhakime/go-car-server:latest
+          docker-compose build
+
+      - name: Push Docker image
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          docker-compose push
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,6 +67,8 @@ jobs:
     if: ${{ github.event_name != 'pull_request' }}
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Setup SSH private key
         run: |
           mkdir -p ~/.ssh
@@ -75,12 +84,21 @@ jobs:
             echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           "
 
+      - name: Clean up old files on the server
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_IP }} "
+            rm -rf /home/ubuntu/server &&
+            mkdir -p /home/ubuntu/server/
+          "
+
+      - name: Copy docker-compose.yml to remote server
+        run: scp -i ~/.ssh/id_rsa ./backend/docker-compose.yml ubuntu@${{ secrets.EC2_IP }}:/home/ubuntu/server
+
       - name: Deploy to remote server
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.EC2_IP }} "
-            docker pull ghcr.io/yacoubi-abdelhakime/go-car-server:latest
-            docker stop g-c-container || true
-            docker rm g-c-container || true
-            docker run -d --name g-c-container -p 3000:3000 ghcr.io/yacoubi-abdelhakime/go-car-server:latest
+            docker compose -f ./server/docker-compose.yml down
+            docker compose -f ./server/docker-compose.yml pull
+            docker compose -f ./server/docker-compose.yml up -d
             docker image prune -f
           "
