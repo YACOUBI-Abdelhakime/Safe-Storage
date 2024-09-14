@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: backend_container
+    image: backend-image:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persist uploads in a Docker volume
+      - uploaded_files:/server/uploadedFiles
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo_container
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  uploaded_files:
+    name: uploaded_files
+  mongo_data:
+    name: mongo_data
