@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userSlice from "./user/userSlice.js";
 import globalSlice from "./global/globalSlice.js";
+import fileManagerSlice from "./file-manager/fileManagerSlice.js";
 
 // Redux-persist configuration for user reducer
 const persistConfigUserReducer = {
@@ -16,9 +17,19 @@ const persistConfigGlobalReducer = {
   storage,
 };
 
+// Redux-persist configuration for global reducer
+const persistConfigFileManagerReducer = {
+  key: "fileManagerReducer",
+  storage,
+};
+
 const rootReducer = {
   userReducer: persistReducer(persistConfigUserReducer, userSlice),
   globalReducer: persistReducer(persistConfigGlobalReducer, globalSlice),
+  fileManagerReducer: persistReducer(
+    persistConfigFileManagerReducer,
+    fileManagerSlice
+  ),
 };
 
 const store = configureStore({

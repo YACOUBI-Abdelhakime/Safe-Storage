@@ -71,3 +71,26 @@ export function validatePasswordConfirmation(
   }
   return null;
 }
+
+/**
+ * Function to validate file size and type
+ *
+ * @param file
+ * @param t
+ * @returns Returns a string if the file is invalid, otherwise returns null
+ */
+export function validateFile(
+  file: File,
+  t: TFunction<"translation", undefined>
+): string | null {
+  // Validate the file size (Max : 3MB)
+  if (file.size > 1024 * 1024 * 3) {
+    return t("File size must be less than 3MB");
+  }
+  // Validate the file type
+  const match = file.type.match(/\/(jpg|jpeg|png|pdf)$/);
+  if (!match) {
+    return t("Only JPG, JPEG, PNG and PDF files are allowed");
+  }
+  return null;
+}

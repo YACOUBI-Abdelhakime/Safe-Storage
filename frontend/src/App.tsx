@@ -6,6 +6,7 @@ import ProtectRoute from "./utils/ProtectRoutes/ProtectRoute";
 import Alert from "./components/Alert/Alert";
 import RegisterScreen from "./screens/RegisterScreen/Register";
 import useAuth from "./utils/customHooks/useAuth";
+import HomeScreen from "./screens/Home/Home";
 
 function App() {
   const isSignedIn = useAuth();
@@ -37,7 +38,7 @@ function App() {
               path="/"
               element={
                 <ProtectRoute isSignedIn={isSignedIn}>
-                  <h1>HomeScreen</h1>
+                  <HomeScreen />
                 </ProtectRoute>
               }
             ></Route>

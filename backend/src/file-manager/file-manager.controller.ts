@@ -35,7 +35,7 @@ export class FileManagerController {
         } else {
           callback(
             new BadRequestException(
-              'Only JPG, JPEG, PNG and PDF files are allowed!',
+              'Only JPG, JPEG, PNG and PDF files are allowed',
             ),
             false,
           );
