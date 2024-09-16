@@ -1,22 +1,22 @@
 import {
   BadRequestException,
   Controller,
+  Get,
   Post,
   Req,
-  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
+import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
 import { FileManagerDto } from './dtos/file-manager.dto';
 import { FileManagerService } from './file-manager.service';
 import { FileManager } from './schemas/file-manager.schema';
-import { existsSync, mkdirSync, promises } from 'fs';
 
 @Controller('file-manager')
 export class FileManagerController {
@@ -80,5 +80,11 @@ export class FileManagerController {
       type: fileExtension,
     };
     return await this.fileManagerService.uploadFile(fileData);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getFiles(@Req() req: Request): Promise<FileManager[]> {
+    return await this.fileManagerService.getFiles((req as any).user);
   }
 }

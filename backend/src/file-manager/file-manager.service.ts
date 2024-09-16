@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FileManager } from './schemas/file-manager.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { rename } from 'fs';
 import { join } from 'path';
 import { FileManagerDto } from './dtos/file-manager.dto';
@@ -22,8 +22,12 @@ export class FileManagerService {
       .slice(0, -1)
       .join('.');
 
+    const userIdAsObjectId = Types.ObjectId.createFromHexString(
+      fileData.userId,
+    );
+
     const createdFile = await this.fileManagerModel.create({
-      userId: fileData.userId,
+      userId: userIdAsObjectId,
       type: fileData.type,
       fileName: fileNameWithoutExtension,
       size: fileData.size,
@@ -41,5 +45,13 @@ export class FileManagerService {
       }
     });
     return createdFile;
+  }
+
+  async getFiles(payload): Promise<FileManager[]> {
+    // Get user id from jwt payload
+    const userIdAsObjectId = Types.ObjectId.createFromHexString(
+      payload.user._id,
+    );
+    return this.fileManagerModel.find({ userId: userIdAsObjectId });
   }
 }

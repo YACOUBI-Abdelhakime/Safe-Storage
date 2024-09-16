@@ -1,12 +1,7 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 export default function FileCard() {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-
   return (
     <>
       <div className="lg:w-3/12 md:w-4/12 sm:w-6/12 w-full p-2">
