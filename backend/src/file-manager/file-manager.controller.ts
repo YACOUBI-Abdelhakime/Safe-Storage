@@ -2,14 +2,16 @@ import {
   BadRequestException,
   Controller,
   Get,
+  Param,
   Post,
   Req,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { existsSync, mkdirSync } from 'fs';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -80,6 +82,24 @@ export class FileManagerController {
       type: fileExtension,
     };
     return await this.fileManagerService.uploadFile(fileData);
+  }
+
+  @Get('download/:fileId')
+  @UseGuards(JwtAuthGuard)
+  async downloadFile(
+    @Req() req: Request,
+    @Param('fileId') fileId: string,
+    @Res() res: Response,
+  ): Promise<void> {
+    const filePath: string = await this.fileManagerService.getFilePath(
+      (req as any).user,
+      fileId,
+    );
+    if (existsSync(filePath)) {
+      res.download(filePath);
+    } else {
+      throw new BadRequestException('File not found');
+    }
   }
 
   @Get()

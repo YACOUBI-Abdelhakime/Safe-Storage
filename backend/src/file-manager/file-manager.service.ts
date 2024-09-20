@@ -47,11 +47,17 @@ export class FileManagerService {
     return createdFile;
   }
 
+  async getFilePath(payload, fileId: string): Promise<string> {
+    const userId = payload.user._id;
+    const file = await this.fileManagerModel.findById(fileId);
+    return `./uploadedFiles/${userId}/${fileId}${file.type}`;
+  }
+
   async getFiles(payload): Promise<FileManager[]> {
     // Get user id from jwt payload
     const userIdAsObjectId = Types.ObjectId.createFromHexString(
       payload.user._id,
     );
-    return this.fileManagerModel.find({ userId: userIdAsObjectId });
+    return await this.fileManagerModel.find({ userId: userIdAsObjectId });
   }
 }
