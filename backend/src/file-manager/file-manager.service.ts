@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FileManager } from './schemas/file-manager.schema';
 import { Model, Types } from 'mongoose';
@@ -6,6 +11,7 @@ import { rename } from 'fs';
 import { join } from 'path';
 import { FileManagerDto } from './dtos/file-manager.dto';
 import { RenameFileDto } from './dtos/rename.file.dto';
+import { unlink } from 'fs/promises';
 
 @Injectable()
 export class FileManagerService {
@@ -77,5 +83,32 @@ export class FileManagerService {
       { fileName: renameFileDto.fileName },
     );
     return await this.fileManagerModel.findById(fileIdAsObjectId);
+  }
+
+  async deleteFile(payload, fileId: string): Promise<FileManager> {
+    // Get user id from jwt payload
+    const userIdAsObjectId = Types.ObjectId.createFromHexString(
+      payload.user._id,
+    );
+    const fileIdAsObjectId = Types.ObjectId.createFromHexString(fileId);
+    const file = await this.fileManagerModel.findOne({
+      userId: userIdAsObjectId,
+      _id: fileIdAsObjectId,
+    });
+    if (!file) {
+      throw new NotFoundException('File not found');
+    }
+    // Delete file from storage
+    try {
+      const filePath = `./uploadedFiles/${payload.user._id}/${fileId}${file.type}`;
+      await unlink(filePath);
+    } catch (err) {
+      throw new InternalServerErrorException('File deletion failed');
+    }
+    // Delete file from database
+    const deleteFile =
+      await this.fileManagerModel.findByIdAndDelete(fileIdAsObjectId);
+
+    return deleteFile;
   }
 }

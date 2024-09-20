@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -123,5 +124,14 @@ export class FileManagerController {
       fileId,
       renameFileDto,
     );
+  }
+
+  @Delete('/:fileId')
+  @UseGuards(JwtAuthGuard)
+  async deleteFile(
+    @Param('fileId') fileId: string,
+    @Req() req: Request,
+  ): Promise<FileManager> {
+    return await this.fileManagerService.deleteFile((req as any).user, fileId);
   }
 }
