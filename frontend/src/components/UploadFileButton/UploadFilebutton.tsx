@@ -35,7 +35,7 @@ export default function UploadFileButton() {
 
   return (
     <button
-      className="fixed bottom-0 right-0 p-2 m-10 rounded-xl bg-blue-600 flex group"
+      className="fixed bottom-0 right-0 p-2 m-10 rounded-xl bg-blue-600 flex group hover:bg-blue-500"
       onClick={() => fileInput.current?.click()}
     >
       <input
@@ -45,9 +45,7 @@ export default function UploadFileButton() {
         className="hidden"
       />
       <CloudArrowUpIcon className="h-7 w-7 text-white" />
-      <p className="ml-2 text-white font-bold hidden group-hover:block">
-        upload
-      </p>
+      <p className="ml-2 text-white font-semibold">{t("Upload")}</p>
     </button>
   );
 }

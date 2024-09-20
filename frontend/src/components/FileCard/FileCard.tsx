@@ -4,8 +4,28 @@ import { FileManager } from "../../features/file-manager/types/FileManager";
 import { getFileType } from "../../features/file-manager/utils/getFileType";
 import { FileType } from "../../features/file-manager/types/enums/FileType.enum";
 import { DocumentIcon } from "@heroicons/react/24/solid";
+import { AppDispatch } from "../../features/store";
+import { useDispatch } from "react-redux";
+import { deleteFile } from "../../features/file-manager/asyncThunks";
+import { AlertType } from "../../features/global/types/AlertType";
+import { addAlertMessage } from "../../features/global/globalSlice";
+import { useTranslation } from "react-i18next";
 
 export default function FileCard({ file }: { file: FileManager }) {
+  const dispatch: AppDispatch = useDispatch();
+  const { t } = useTranslation();
+
+  const openOptionsList = (file: FileManager) => {
+    dispatch(deleteFile(file._id))
+      .unwrap()
+      .then(() => {
+        const message: string = t("File {{fileName}} deleted successfully", {
+          fileName: '"' + file.fileName + file.type + '"',
+        });
+        const type: AlertType = AlertType.SUCCESS;
+        dispatch(addAlertMessage({ message, type }));
+      });
+  };
   return (
     <>
       <div className="lg:w-3/12 md:w-4/12 sm:w-6/12 w-full p-2">
@@ -23,6 +43,7 @@ export default function FileCard({ file }: { file: FileManager }) {
             <EllipsisVerticalIcon
               role="button"
               className="h-6 w-6 text-gray-500 flex-shrink-0"
+              onClick={() => openOptionsList(file)}
             />
           </div>
           <div className="icon bg-white flex flex-grow items-center justify-center rounded-md">
