@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { rename } from 'fs';
 import { join } from 'path';
 import { FileManagerDto } from './dtos/file-manager.dto';
+import { RenameFileDto } from './dtos/rename.file.dto';
 
 @Injectable()
 export class FileManagerService {
@@ -59,5 +60,22 @@ export class FileManagerService {
       payload.user._id,
     );
     return await this.fileManagerModel.find({ userId: userIdAsObjectId });
+  }
+
+  async renameFile(
+    payload,
+    fileId: string,
+    renameFileDto: RenameFileDto,
+  ): Promise<FileManager> {
+    // Get user id from jwt payload
+    const userIdAsObjectId = Types.ObjectId.createFromHexString(
+      payload.user._id,
+    );
+    const fileIdAsObjectId = Types.ObjectId.createFromHexString(fileId);
+    await this.fileManagerModel.updateOne(
+      { userId: userIdAsObjectId, _id: fileIdAsObjectId },
+      { fileName: renameFileDto.fileName },
+    );
+    return await this.fileManagerModel.findById(fileIdAsObjectId);
   }
 }

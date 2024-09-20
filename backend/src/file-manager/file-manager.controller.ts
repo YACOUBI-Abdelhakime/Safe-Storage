@@ -1,8 +1,10 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Req,
   Res,
@@ -19,6 +21,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.auth.guard';
 import { FileManagerDto } from './dtos/file-manager.dto';
 import { FileManagerService } from './file-manager.service';
 import { FileManager } from './schemas/file-manager.schema';
+import { RenameFileDto } from './dtos/rename.file.dto';
 
 @Controller('file-manager')
 export class FileManagerController {
@@ -106,5 +109,19 @@ export class FileManagerController {
   @UseGuards(JwtAuthGuard)
   async getFiles(@Req() req: Request): Promise<FileManager[]> {
     return await this.fileManagerService.getFiles((req as any).user);
+  }
+
+  @Patch('/:fileId')
+  @UseGuards(JwtAuthGuard)
+  async renameFile(
+    @Param('fileId') fileId: string,
+    @Body() renameFileDto: RenameFileDto,
+    @Req() req: Request,
+  ): Promise<FileManager> {
+    return await this.fileManagerService.renameFile(
+      (req as any).user,
+      fileId,
+      renameFileDto,
+    );
   }
 }
