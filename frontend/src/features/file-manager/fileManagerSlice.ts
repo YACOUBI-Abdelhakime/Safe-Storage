@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./types/FileManagerState";
-import { deleteFile, getFilesData, uploadFile } from "./asyncThunks";
+import {
+  deleteFile,
+  downloadFile,
+  getFilesData,
+  uploadFile,
+} from "./asyncThunks";
 
 const initialState: UserState = {
   files: [],
@@ -22,6 +27,16 @@ const userSlice = createSlice({
         state.files.push(action.payload);
       })
       .addCase(uploadFile.rejected, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+      }) // Download file
+      .addCase(downloadFile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(downloadFile.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(downloadFile.rejected, (state, action) => {
         console.log(action.payload);
         state.isLoading = false;
       })

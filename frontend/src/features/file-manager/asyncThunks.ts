@@ -31,6 +31,43 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
+export const downloadFile = createAsyncThunk(
+  "fileManagerReducer/downloadFile",
+  async (fileId: string, thunkAPI) => {
+    const state: any = thunkAPI.getState();
+    const token = state.userReducer.user.token;
+    try {
+      const response = await axios.get(
+        `${SERVER_URL}/file-manager/download/${fileId}`,
+        {
+          responseType: "blob",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // Get fileName from the custom header
+      // Fallback to fileId if not available
+      const fileName = response.headers["filename"] || fileId;
+      // Create a URL for the file blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      return;
+    } catch (error: any) {
+      const message: string = error.response.data.message;
+      const type: AlertType = AlertType.ERROR;
+      thunkAPI.dispatch(addAlertMessage({ message, type }));
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 export const getFilesData = createAsyncThunk(
   "fileManagerReducer/getFilesData",
   async (_, thunkAPI) => {

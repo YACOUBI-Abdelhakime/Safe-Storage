@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -95,14 +96,15 @@ export class FileManagerController {
     @Param('fileId') fileId: string,
     @Res() res: Response,
   ): Promise<void> {
-    const filePath: string = await this.fileManagerService.getFilePath(
-      (req as any).user,
-      fileId,
-    );
+    const { filePath, fileName }: { filePath: string; fileName: string } =
+      await this.fileManagerService.getFileData((req as any).user, fileId);
+    // Set a custom header with the filename
+    res.setHeader('filename', fileName);
+    res.setHeader('Access-Control-Expose-Headers', 'filename');
     if (existsSync(filePath)) {
       res.download(filePath);
     } else {
-      throw new BadRequestException('File not found');
+      throw new NotFoundException('File not found');
     }
   }
 

@@ -54,10 +54,18 @@ export class FileManagerService {
     return createdFile;
   }
 
-  async getFilePath(payload, fileId: string): Promise<string> {
+  async getFileData(
+    payload,
+    fileId: string,
+  ): Promise<{ filePath: string; fileName: string }> {
     const userId = payload.user._id;
     const file = await this.fileManagerModel.findById(fileId);
-    return `./uploadedFiles/${userId}/${fileId}${file.type}`;
+    if (!file) {
+      throw new NotFoundException('File not found');
+    }
+    const filePath = `./uploadedFiles/${userId}/${fileId}${file.type}`;
+    const fileName = file.fileName + file.type;
+    return { filePath, fileName };
   }
 
   async getFiles(payload): Promise<FileManager[]> {
