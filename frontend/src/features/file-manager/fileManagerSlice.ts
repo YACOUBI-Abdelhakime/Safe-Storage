@@ -4,6 +4,7 @@ import {
   deleteFile,
   downloadFile,
   getFilesData,
+  renameFile,
   uploadFile,
 } from "./asyncThunks";
 
@@ -49,6 +50,23 @@ const userSlice = createSlice({
         state.files = action.payload;
       })
       .addCase(getFilesData.rejected, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+      })
+      // Rename file
+      .addCase(renameFile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(renameFile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.files = state.files.map((file) => {
+          if (file._id === action.payload._id) {
+            return action.payload;
+          }
+          return file;
+        });
+      })
+      .addCase(renameFile.rejected, (state, action) => {
         console.log(action.payload);
         state.isLoading = false;
       })

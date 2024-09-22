@@ -31,6 +31,8 @@
   "File size must be less than 3MB": "La taille du fichier doit être inférieure à 3 Mo",
   "File too large": "La taille du fichier doit être inférieure à 3 Mo",
   "Upload": "Téléverser",
+  "Required field": "Champ obligatoire",
+  "Name must be at least 3 characters long": "Le nom doit comporter au moins 3 caractères",
   "Start by securely uploading your documents": "Commencez par ajouter vos documents en toute sécurité",
   "File {{fileName}} deleted successfully": "Fichier {{fileName}} supprimé avec succès"
 }

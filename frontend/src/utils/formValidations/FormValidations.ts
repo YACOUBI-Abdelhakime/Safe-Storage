@@ -1,6 +1,27 @@
 import { TFunction } from "i18next";
 
 /**
+ * Function to validate the names
+ *
+ * @param email
+ * @param t
+ * @returns Returns a string if the name is invalid, otherwise returns null
+ */
+export function validateName(
+  name: string,
+  t: TFunction<"translation", undefined>
+): string | null {
+  if (!name) {
+    return t("Required field");
+  }
+  // Name must be at least 3 characters long
+  if (name.length < 3) {
+    return t("Name must be at least 3 characters long");
+  }
+  return null;
+}
+
+/**
  * Function to validate the email
  *
  * @param email
