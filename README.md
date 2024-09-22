@@ -28,3 +28,23 @@ A web application for user authentication and secure file upload. Users can regi
 - [x] Upload files in PDF, JPEG, JPG or PNG format
 - [x] Rename and delete files
 - [x] Download files
+
+## Secrets to add to gitHub secrets
+
+```bash
+# AWS Credentials
+AWS_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY
+
+CLIENT_URL
+
+# MongoDB URI
+DB_URI
+
+# EC2 instance Credentials
+EC2_IP
+EC2_PRIVATE_KEY
+
+JWT_EXPIRES_IN
+JWT_SECRET
+```
