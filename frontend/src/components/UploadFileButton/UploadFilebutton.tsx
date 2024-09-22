@@ -13,24 +13,31 @@ export default function UploadFileButton() {
   const fileInput = useRef<HTMLInputElement>(null);
   const dispatch: AppDispatch = useDispatch();
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file: File | null = e.target.files ? e.target.files[0] : null;
+    const files: FileList | null = e.target.files ? e.target.files : null;
 
-    if (!file) {
+    if (!files) {
       return;
     }
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!file) {
+        continue;
+      }
+      console.log("name = " + file.name);
 
-    const fileError: string | null = validateFile(file, t);
-    if (fileError) {
-      const message: string = fileError;
-      const type: AlertType = AlertType.ERROR;
-      dispatch(addAlertMessage({ message, type }));
-      return;
+      const fileError: string | null = validateFile(file, t);
+      if (fileError) {
+        const message: string = fileError;
+        const type: AlertType = AlertType.ERROR;
+        dispatch(addAlertMessage({ message, type }));
+        continue;
+      }
+
+      // Upload file
+      dispatch(uploadFile({ file }));
     }
-
-    // Upload file
-    dispatch(uploadFile({ file }));
   };
 
   return (
@@ -41,8 +48,9 @@ export default function UploadFileButton() {
       <input
         ref={fileInput}
         type="file"
-        onChange={handleUpload}
+        onChange={handleUploadFiles}
         className="hidden"
+        multiple
       />
       <CloudArrowUpIcon className="h-7 w-7 text-white" />
       <p className="ml-2 text-white font-semibold">{t("Upload")}</p>

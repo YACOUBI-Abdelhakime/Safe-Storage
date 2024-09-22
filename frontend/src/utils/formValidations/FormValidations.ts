@@ -106,12 +106,16 @@ export function validateFile(
 ): string | null {
   // Validate the file size (Max : 3MB)
   if (file.size > 1024 * 1024 * 3) {
-    return t("File size must be less than 3MB");
+    return t("{{fileName}} File size must be less than 3MB", {
+      fileName: '"' + file.name + '"',
+    });
   }
   // Validate the file type
   const match = file.type.match(/\/(jpg|jpeg|png|pdf)$/);
   if (!match) {
-    return t("Only JPG, JPEG, PNG and PDF files are allowed");
+    return t("{{fileName}} Only JPG, JPEG, PNG and PDF files are allowed", {
+      fileName: '"' + file.name + '"',
+    });
   }
   return null;
 }
