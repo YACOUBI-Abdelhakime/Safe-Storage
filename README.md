@@ -9,7 +9,7 @@
 
 ## About
 
-A web application for user authentication and secure file upload. Users can register, log in, and upload files in PDF, JPEG, JPG or PNG format. Built with ReactJS and NestJS, styled with Tailwind CSS. The application is containerized using Docker and hosted on AWS EC2, with the front-end served via AWS S3.
+A web application for user authentication and secure file upload. Users can register, log in, and upload/download files in PDF, JPEG, JPG or PNG format. Built with ReactJS and NestJS, styled with Tailwind CSS. The application is containerized using Docker and hosted on AWS EC2, with the front-end served via AWS S3.
 
 ## Technologies
 

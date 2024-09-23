@@ -58,9 +58,10 @@ export const downloadFile = createAsyncThunk(
       // Get fileName from the custom header
       // Fallback to fileId if not available
       const fileName = response.headers["filename"] || fileId;
-      // Create a URL for the file blob
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+
       if (saveFile) {
+        // Create a URL for the file blob
+        const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", fileName);
@@ -68,12 +69,14 @@ export const downloadFile = createAsyncThunk(
         link.click();
         link.remove();
       } else {
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const previewUrl = window.URL.createObjectURL(blob);
         const fileExtension = fileName.split(".").pop();
         const fileType: FileType = getFileType("." + fileExtension);
         // Dispatch an action to save the preview URL in the state
         thunkAPI.dispatch(
           savePreviewUrl({
-            previewUrl: url,
+            previewUrl: previewUrl,
             fileType,
           })
         );
