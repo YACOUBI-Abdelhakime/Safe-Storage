@@ -8,7 +8,7 @@ import { FileManager } from "../../features/file-manager/types/FileManager";
 import { AppDispatch } from "../../features/store";
 import { validateName } from "../../utils/formValidations/FormValidations";
 
-export default function MyModal({
+export default function RenameFileModal({
   isOpen,
   setIsOpen,
   file,

@@ -16,15 +16,19 @@ import { FileManager } from "../../features/file-manager/types/FileManager";
 import { addAlertMessage } from "../../features/global/globalSlice";
 import { AlertType } from "../../features/global/types/AlertType";
 import { AppDispatch } from "../../features/store";
-import MyModal from "./RenameFileModel";
+import RenameFileModal from "./RenameFileModal";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 export default function FileCardDropdown({ file }: { file: FileManager }) {
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
+  const onPreviewFile = (file: FileManager) => {
+    dispatch(downloadFile({ fileId: file._id, saveFile: false }));
+  };
   const onDownloadFile = (file: FileManager) => {
-    dispatch(downloadFile(file._id));
+    dispatch(downloadFile({ fileId: file._id, saveFile: true }));
   };
   const onOpenRenameFileModel = () => {
     setIsOpen(true);
@@ -54,6 +58,17 @@ export default function FileCardDropdown({ file }: { file: FileManager }) {
           className="absolute right-0 z-10 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
         >
           <div className="py-1">
+            <MenuItem>
+              <div
+                className="flex block pl-4 pr-10 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 cursor-pointer"
+                onClick={() => {
+                  onPreviewFile(file);
+                }}
+              >
+                <EyeIcon className="h-5 w-5 text-gray-500" />
+                <p className="ml-2">{t("Preview")}</p>
+              </div>
+            </MenuItem>
             <MenuItem>
               <div
                 className="flex block pl-4 pr-10 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 cursor-pointer"
@@ -90,7 +105,7 @@ export default function FileCardDropdown({ file }: { file: FileManager }) {
           </div>
         </MenuItems>
       </Menu>
-      <MyModal isOpen={isOpen} setIsOpen={setIsOpen} file={file} />
+      <RenameFileModal isOpen={isOpen} setIsOpen={setIsOpen} file={file} />
     </>
   );
 }

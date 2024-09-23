@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import FileCard from "../../components/FileCard/FileCard";
+import FilePreviewModal from "../../components/FileCard/FilePreviewModal";
 import UploadFileButton from "../../components/UploadFileButton/UploadFilebutton";
 import { getFilesData } from "../../features/file-manager/asyncThunks";
 import { FileManager } from "../../features/file-manager/types/FileManager";
@@ -40,7 +41,7 @@ export default function HomeScreen() {
           </div>
         )}
       </div>
-
+      <FilePreviewModal />
       <UploadFileButton />
     </>
   );

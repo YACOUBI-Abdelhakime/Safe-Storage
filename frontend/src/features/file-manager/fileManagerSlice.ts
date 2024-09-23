@@ -10,13 +10,22 @@ import {
 
 const initialState: UserState = {
   files: [],
+  previewFile: null,
   isLoading: false,
 };
 
 const userSlice = createSlice({
   name: "fileManagerReducer",
   initialState,
-  reducers: {},
+  reducers: {
+    savePreviewUrl: (state, action) => {
+      const { previewUrl, fileType } = action.payload;
+      state.previewFile = { previewUrl, fileType };
+    },
+    deletePreviewUrl: (state) => {
+      state.previewFile = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Upload file
@@ -88,3 +97,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { savePreviewUrl, deletePreviewUrl } = userSlice.actions;

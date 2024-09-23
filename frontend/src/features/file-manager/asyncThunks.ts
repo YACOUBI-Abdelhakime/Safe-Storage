@@ -5,6 +5,9 @@ import { addAlertMessage } from "../global/globalSlice";
 import { AlertType } from "../global/types/AlertType";
 import { UploadFileDto } from "./types/dtos/UploadFileDto";
 import { RenameFileDto } from "./types/dtos/RenameFileDto";
+import { getFileType } from "./utils/getFileType";
+import { FileType } from "./types/enums/FileType.enum";
+import { savePreviewUrl } from "./fileManagerSlice";
 
 export const uploadFile = createAsyncThunk(
   "fileManagerReducer/uploadFile",
@@ -34,7 +37,10 @@ export const uploadFile = createAsyncThunk(
 
 export const downloadFile = createAsyncThunk(
   "fileManagerReducer/downloadFile",
-  async (fileId: string, thunkAPI) => {
+  async (
+    { fileId, saveFile }: { fileId: string; saveFile: boolean },
+    thunkAPI
+  ) => {
     const state: any = thunkAPI.getState();
     const token = state.userReducer.user.token;
     try {
@@ -48,17 +54,30 @@ export const downloadFile = createAsyncThunk(
           },
         }
       );
+
       // Get fileName from the custom header
       // Fallback to fileId if not available
       const fileName = response.headers["filename"] || fileId;
       // Create a URL for the file blob
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      if (saveFile) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } else {
+        const fileExtension = fileName.split(".").pop();
+        const fileType: FileType = getFileType("." + fileExtension);
+        // Dispatch an action to save the preview URL in the state
+        thunkAPI.dispatch(
+          savePreviewUrl({
+            previewUrl: url,
+            fileType,
+          })
+        );
+      }
       return;
     } catch (error: any) {
       const message: string = error.response.data.message;
