@@ -1,8 +1,8 @@
 <div align="center">
-  <a href="http://s2-safe-storage.s3-website.eu-west-3.amazonaws.com/">
+  <a href="http://safe--storage.s3-website.eu-west-3.amazonaws.com/">
     <img src="frontend/public/assets/logo/logo.png" alt="logo" width="200"/>
   </a>
-  <a href="http://s2-safe-storage.s3-website.eu-west-3.amazonaws.com/">
+  <a href="http://safe--storage.s3-website.eu-west-3.amazonaws.com/">
     <p style="font-size: 30px; color: white;">🔒 Safe Storage ☁️</p>
   </a>
 </div>
